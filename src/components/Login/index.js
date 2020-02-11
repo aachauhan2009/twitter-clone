@@ -31,7 +31,7 @@ export default function Login(props) {
     if (token && verifier) {
       history.replace("/");
     }
-  }, []);
+  }, [history]);
 
   const signIn = () => {
     fetch("api/getToken").then(data => data.json()).then(data => {
