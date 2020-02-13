@@ -16,7 +16,7 @@ export default function Timeline(props) {
   return (
     <div css={timelineCSS}>
       {posts.map(post => (
-        <Post post={post} />
+        <Post key={post.id} post={post} />
       ))}
     </div>
   );
