@@ -40,7 +40,7 @@ export default function Login(props) {
   }, [history, setUser]);
   const bg = useColorModeValue('blue.50', 'gray.800');
   const signIn = () => {
-    fetch("api/getToken").then(data => data.json()).then(data => {
+    fetch(`api/getToken?callback=${window.location.origin}`).then(data => data.json()).then(data => {
       console.log(data);
       if (data.token) {
         window.location.replace(`https://api.twitter.com/oauth/authenticate?oauth_token=${data.token}`);

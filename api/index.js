@@ -15,9 +15,10 @@ app.use(express.static(path.join(__dirname, "../build")));
 const handledRequest = ["api/getToken", "api/access", "/api/authenticate"];
 
 app.get("/api/getToken", function(req, res) {
+  const callback = req.query.callback;
   const url = "https://api.twitter.com/oauth/request_token";
   const oauth = {
-    callback: "http://twitter.amitchauhan.tech:3000",
+    callback,
     consumer_key: CONSUMER_KEY,
     consumer_secret: CONSUMER_SECRET
   };
