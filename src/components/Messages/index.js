@@ -1,7 +1,6 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { getAllMessages } from "../../resources/api";
-import Post from "../Post";
 import { Flex } from "@chakra-ui/react";
 
 export default function Timeline() {

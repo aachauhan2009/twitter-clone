@@ -2,14 +2,13 @@ import React from 'react';
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { parsePost } from './utils';
-import { styles } from "./styles";
 import { MdFavorite, MdRepeat } from "react-icons/md";
 import { Box, Flex, Avatar,  Icon, Text, Fade, useColorModeValue } from '@chakra-ui/react';
 
 export default function Post({ post }) {
   const posts = useMemo(() => parsePost(post), [post]);
-  const backgroundColor = useColorModeValue("gray.200", "gray.700");
-  const headerColor = useColorModeValue("cyan.600", "cyan.200");
+  const backgroundColor = useColorModeValue("blue.400", "gray.700");
+  const headerColor = useColorModeValue("white", "cyan.200");
 
 
   return (
@@ -23,7 +22,7 @@ export default function Post({ post }) {
               src={post?.user?.profile_image_url}
               name={post?.user?.name}
             />
-            {post?.user?.screen_name ? <Link css={styles.link} to={`${post?.user?.screen_name}`}>
+            {post?.user?.screen_name ? <Link to={`${post?.user?.screen_name}`}>
               {post?.user?.name}
             </Link> : <Text>{post?.user?.name}</Text>}
           </Flex>

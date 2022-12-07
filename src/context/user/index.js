@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 
 const Context = createContext();
 
@@ -24,5 +24,12 @@ export const useUser = () => {
 
 export const useSetUser = () => {
   const { setUser } = useContext(Context);
-  return setUser;
+  return useCallback((user) => {
+    if(user === null) {
+      localStorage.removeItem("user")
+    } else {
+      localStorage.setItem("user", JSON.stringify(user));
+    }
+    setUser(user)
+  }, [setUser]);
 };

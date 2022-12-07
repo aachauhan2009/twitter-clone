@@ -1,21 +1,26 @@
 import React from "react";
 import URI from "urijs";
+import { Center, Button, Spinner, useColorModeValue } from '@chakra-ui/react'
+
+
 import { useHistory } from "react-router-dom";
-import { useSetUser } from "../../context/user";
+import { useSetUser, useUser } from "../../context/user";
 
 export default function Login(props) {
-  const [isLoggedin, setIsLoggedin] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
   const setUser = useSetUser();
+  const user = useUser();
 
   React.useEffect(() => {
     const url = new URI(window.location.href);
     const { oauth_token: token, oauth_verifier: verifier } = url.search(true);
+    console.log(token, verifier);
     if (localStorage.getItem('user')) {
-      setIsLoggedin(true);
+      console.log("if", localStorage.getItem('user'));
       setIsLoading(false);
-    } else if (token && verifier){
+    } else if (token && verifier) {
+      console.log("else if");
       setIsLoading(true);
       fetch('api/access', {
         method: 'POST',
@@ -24,9 +29,7 @@ export default function Login(props) {
         },
         body: JSON.stringify(url.search(true))
       }).then(data => data.json()).then(data => {
-        localStorage.setItem('user', JSON.stringify(data));
         setUser(data);
-        setIsLoggedin(true);
         setIsLoading(false);
       });
     }
@@ -34,22 +37,20 @@ export default function Login(props) {
     if (token && verifier) {
       history.replace("/");
     }
-  }, [history]);
-
+  }, [history, setUser]);
+  const bg = useColorModeValue('blue.50', 'gray.800');
   const signIn = () => {
     fetch("api/getToken").then(data => data.json()).then(data => {
       console.log(data);
-      if(data.token) {
+      if (data.token) {
         window.location.replace(`https://api.twitter.com/oauth/authenticate?oauth_token=${data.token}`);
       }
     });
-  }; 
+  };
+  return <Center h={user ? "100%" : "100vh"} bg={bg} > {
+      isLoading ? <Spinner /> : user ? props.children : (
 
-  if (isLoading)
-    return <h1>Signing In...</h1>
-  return isLoggedin ? props.children : (
-    <div>
-      <button onClick={signIn}>Sign In</button>
-    </div>
-  );
+        <Button onClick={signIn}>Sign In</Button>
+      )}
+  </Center>
 }

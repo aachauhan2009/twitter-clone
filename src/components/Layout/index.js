@@ -1,49 +1,58 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from '../../context/user';
-import { Box, Center, Container, Icon,  Flex, Switch, useColorMode, Button, IconButton, useColorModeValue } from "@chakra-ui/react";
+import { useUser, useSetUser } from '../../context/user';
+import { Box, Center, Container, Flex, Switch, useColorMode, Button, IconButton, useColorModeValue } from "@chakra-ui/react";
 import { MdHome, MdMessage, MdNotifications, MdPerson } from 'react-icons/md';
 
-export default function Login(props) {
+export default function Layout(props) {
   const user = useUser();
+  const setUser = useSetUser();
   const { colorMode, toggleColorMode } = useColorMode();
 
-  const backgroundColor = useColorModeValue('gray.200', 'gray.700')
+  const bg = useColorModeValue('blue.400', 'gray.700');
+  const colorScheme = "gray"
+
   return (
-    <Box>
-      <Center bg={backgroundColor} as="header">
+    <Box w="100%">
+      {user && <Center bg={bg} zIndex={1} position="sticky" top="0" boxShadow='base' w="100%" as="header">
         <Container>
           <Flex alignItems="center" justifyContent="space-evenly" my={3}>
             <IconButton
               as={Link}
-              colorScheme="cyan"
+              colorScheme={colorScheme}
               to="/"
-              variant="outline"
+              variant='ghost'
               icon={<MdHome />}
             />
             <IconButton
               as={Link}
-              colorScheme="cyan"
+              colorScheme={colorScheme}
               to="/messages"
-              variant="outline"
+              variant='ghost'
               icon={<MdMessage />}
             />
             <IconButton
               as={Link}
-              colorScheme="cyan"
+              colorScheme={colorScheme}
               to="/"
-              variant="outline"
+              variant='ghost'
               icon={<MdNotifications />}
             />
             <IconButton
               as={Link}
-              colorScheme="cyan"
+              colorScheme={colorScheme}
               to={`/${user?.screen_name}`}
-              variant="outline"
+              variant='ghost'
               icon={<MdPerson />}
             />
+            <Button onClick={() => {
+              setUser(null);
+            }} size='xs'>
+              Logout
+            </Button>
+
             <Switch
-              colorScheme="cyan"
+              colorScheme={colorScheme}
               defaultChecked={colorMode === 'dark'}
               onChange={() =>
                 toggleColorMode(colorMode === "light" ? "dark" : "light")
@@ -51,7 +60,7 @@ export default function Login(props) {
             />
           </Flex>
         </Container>
-      </Center>
+      </Center>}
 
       <Container>{props.children}</Container>
     </Box>

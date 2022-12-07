@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getUseDetails } from "../../../resources/api";
 import Post from '../../Post';
 import { useQuery } from "react-query";
-import { Avatar, Box, Text, Container, Heading, Flex, Link, Icon } from '@chakra-ui/react';
+import { Avatar, Box, Text, Heading, Flex, Link, Icon } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import {  MdLocationOn, MdDateRange } from 'react-icons/md';
 
@@ -15,7 +15,7 @@ function abbreviateNumber(value) {
     var shortValue = "";
     for (var precision = 2; precision >= 1; precision--) {
       shortValue = parseFloat(
-        (suffixNum != 0
+        (suffixNum !== 0
           ? value / Math.pow(1000, suffixNum)
           : value
         ).toPrecision(precision)
@@ -25,17 +25,15 @@ function abbreviateNumber(value) {
         break;
       }
     }
-    if (shortValue % 1 != 0) shortValue = shortValue.toFixed(1);
+    if (shortValue % 1 !== 0) shortValue = shortValue.toFixed(1);
     newValue = shortValue + suffixes[suffixNum];
   }
   return newValue;
 }
 
-export default function UseProfile(props) {
+export default function UseProfile() {
   const { userId } = useParams();
   const { data: user } = useQuery(["user", userId], () => getUseDetails(userId));
-  
-  console.log({ user });
 
   if (!user.screen_name) {
     return (

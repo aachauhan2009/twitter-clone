@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@chakra-ui/icons": "^1.0.3",
-    "@chakra-ui/react": "^1.1.2",
+    "@chakra-ui/icons": "^2.0.3",
+    "@chakra-ui/react": "^2.4.2",
     "@emotion/core": "^10.0.27",
     "@emotion/react": "^11.1.4",
     "@emotion/styled": "^11.0.0",
@@ -16,13 +16,13 @@
     "framer-motion": "^3.1.4",
     "http-proxy-middleware": "^0.20.0",
     "querystring": "^0.2.0",
-    "react": "experimental",
-    "react-dom": "experimental",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-icons": "^3.9.0",
     "react-query": "^1.5.9",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
-    "react-scripts": "3.3.1",
+    "react-scripts": "5.0.1",
     "request": "^2.88.0",
     "urijs": "^1.19.4"
   },
@@ -31,6 +31,7 @@
     "server": "node server/index",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint:fix ": "eslint --fix",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

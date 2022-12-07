@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import { getPosts } from "../../resources/api";
 import Post from "../Post";
-import {  Center, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 export default function Timeline() {
   const posts = useQuery("timeline", getPosts);
