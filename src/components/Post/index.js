@@ -1,77 +1,48 @@
-/** @jsx jsx */
-
-import { jsx, css } from '@emotion/core';
+import React from 'react';
 import { useMemo } from 'react';
-
-const postCSS = css`
-  border: 1px solid lightblue;
-  padding: 10px;
-  overflow-wrap: break-word;
-  white-space: pre-wrap;
-`;
-
-const getText = entity => {
-  switch (entity.key) {
-    case 'hashtags':
-      return `#${entity.text}`;
-    case 'user_mentions':
-      return `@${entity.screen_name}`;
-    case 'urls':
-      return entity.url;
-    default:
-      return null;
-  }
-};
+import { Link } from 'react-router-dom';
+import { parsePost } from './utils';
+import { styles } from "./styles";
+import { MdFavorite, MdRepeat } from "react-icons/md";
+import { Box, Flex, Avatar,  Icon, Text, Fade, useColorModeValue } from '@chakra-ui/react';
 
 export default function Post({ post }) {
-  const posts = useMemo(() => {
-    const posts = [];
-    let lastIndex = 0;
-    const postText = post.text;
-    const flatEntities = Object.keys(post.entities)
-      .map(key => post.entities[key].map(v => ({ ...v, key })))
-      .flat()
-      .sort((a, b) => a.indices[0] - b.indices[0]);
-    const lowerPost = post.text.toLowerCase();
-    flatEntities.forEach(entity => {
-      const textStr = getText(entity);
-      if (textStr === null) return;
-      const startIndex = lowerPost.indexOf(textStr.toLowerCase(), lastIndex);
-      const endIndex = startIndex + textStr.length;
-      const startText = postText.slice(lastIndex, startIndex);
-      const tagElement = <a href={textStr}>{postText.slice(startIndex, endIndex)}</a>;
-      lastIndex = endIndex;
-      posts.push(startText, tagElement);
-    });
-    posts.push(postText.slice(lastIndex, -1));
-    return posts;
-  }, [post]);
+  const posts = useMemo(() => parsePost(post), [post]);
+  const backgroundColor = useColorModeValue("gray.200", "gray.700");
+  const headerColor = useColorModeValue("cyan.600", "cyan.200");
+
 
   return (
-    <div css={postCSS} key={post.id}>
-      <div css={css`
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      `}>
-        <img
-          src={post.user.profile_image_url}
-          alt={post.user.name}
-          css={css`
-            height: 30px;
-            width: 30px;
-            border-radius: 50%;
-            margin-right: 5px;
-          `}
-        />
-        <strong>{post.user.name}</strong>
-      </div>
-      {posts.map((p, i) => (
-        <span key={i}>{p.replace ? p.replace('\n\n\n', '\n\n') : p}</span>
-      ))}
-      <div>
-        <button>{post.retweet_count}</button>
-      </div>
-    </div>
+    <Fade in>
+      <Box shadow="md" m={3}>
+        <Flex bg={backgroundColor} p={3} color={headerColor}>
+          <Flex align="center" flex="1">
+            <Avatar
+              size="sm"
+              mr={2}
+              src={post?.user?.profile_image_url}
+              name={post?.user?.name}
+            />
+            {post?.user?.screen_name ? <Link css={styles.link} to={`${post?.user?.screen_name}`}>
+              {post?.user?.name}
+            </Link> : <Text>{post?.user?.name}</Text>}
+          </Flex>
+          <Flex>
+            <Icon as={MdFavorite} w={6} h={6} />
+            <Text ml={2} mr={5}>
+              {post.favorite_count}
+            </Text>
+
+            <Icon as={MdRepeat} w={6} h={6} />
+            <Text ml={2}>{post.retweet_count}</Text>
+          </Flex>
+        </Flex>
+        <Box color="gray.500" p={3}>
+          {posts.map((p, i) => (
+            <span key={i}>{p.replace ? p.replace("\n\n\n", "\n\n") : p}</span>
+          ))}
+        </Box>
+      </Box>
+    </Fade>
   );
 }

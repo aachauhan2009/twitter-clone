@@ -1,11 +1,13 @@
 import React from "react";
 import URI from "urijs";
 import { useHistory } from "react-router-dom";
+import { useSetUser } from "../../context/user";
 
 export default function Login(props) {
   const [isLoggedin, setIsLoggedin] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const history = useHistory();
+  const setUser = useSetUser();
 
   React.useEffect(() => {
     const url = new URI(window.location.href);
@@ -22,7 +24,8 @@ export default function Login(props) {
         },
         body: JSON.stringify(url.search(true))
       }).then(data => data.json()).then(data => {
-        localStorage.setItem('user', JSON.stringify(data)); 
+        localStorage.setItem('user', JSON.stringify(data));
+        setUser(data);
         setIsLoggedin(true);
         setIsLoading(false);
       });
@@ -35,7 +38,10 @@ export default function Login(props) {
 
   const signIn = () => {
     fetch("api/getToken").then(data => data.json()).then(data => {
-      window.location.replace(`https://api.twitter.com/oauth/authenticate?oauth_token=${data.token}`);
+      console.log(data);
+      if(data.token) {
+        window.location.replace(`https://api.twitter.com/oauth/authenticate?oauth_token=${data.token}`);
+      }
     });
   }; 
 
